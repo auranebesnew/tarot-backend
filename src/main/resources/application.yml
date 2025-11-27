@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:tarotdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  security:
+    jwt:
+      # generate with: openssl rand -base64 64
+      secret: "VGhpcy1pcy1hLWR1bW15LXNlY3JldC1rZXktcGxlYXNlLXJlcGxhY2Utd2l0aC1yYW5kb20tb25l"
+      expiration-ms: 86400000
+    refresh:
+      expiration-days: 30
+  subscription:
+    activation-secret: "change-me"
