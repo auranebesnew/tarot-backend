@@ -3,21 +3,22 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:tarotdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:tarot}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USER:tarot-admin}
+    password: ${DB_PASSWORD:fn5YW95BMyL}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
 
 management:
   endpoints:
@@ -29,9 +30,9 @@ app:
   security:
     jwt:
       # generate with: openssl rand -base64 64
-      secret: "VGhpcy1pcy1hLWR1bW15LXNlY3JldC1rZXktcGxlYXNlLXJlcGxhY2Utd2l0aC1yYW5kb20tb25l"
-      expiration-ms: 86400000
+      secret: ${APP_SECURITY_JWT_SECRET:fn5YW95BMyLM8t1GWdxppPIVnfH1MiUsiKiSeN07batuciO1qLbIORBuT145B2}
+      expiration-ms: ${APP_SECURITY_JWT_EXPIRATION_MS:86400000}
     refresh:
-      expiration-days: 30
+      expiration-days: ${APP_SECURITY_REFRESH_EXPIRATION_DAYS:30}
   subscription:
     activation-secret: "change-me"
